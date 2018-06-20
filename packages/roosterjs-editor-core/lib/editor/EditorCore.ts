@@ -41,11 +41,6 @@ interface EditorCore {
     readonly undo: UndoService;
 
     /**
-     * Whether adding undo snapshot is suspended
-     */
-    suspendUndo: boolean;
-
-    /**
      * Custom data of this editor
      */
     readonly customData: {
@@ -56,24 +51,31 @@ interface EditorCore {
     };
 
     /**
-     * Cached selection range of this editor
-     */
-    cachedSelectionRange: Range;
-
-    /**
-     * Interval handle of idle loop
-     */
-    idleLoopHandle: number;
-
-    /**
-     * Whether next idle event should be ignored
-     */
-    ignoreIdleEvent: boolean;
-
-    /**
      * Core API map of this editor
      */
     readonly api: CoreApiMap;
+
+    /**
+     * Whether auto restore previous selection when focus to editor
+     * Default value is false
+     */
+    readonly disableRestoreSelectionOnFocus?: boolean;
+
+    /**
+     * Whether skip setting contenteditable attribute to content DIV
+     * Default value is false
+     */
+    readonly omitContentEditable?: boolean;
+
+    /**
+     * Whether adding undo snapshot is suspended
+     */
+    suspendUndo: boolean;
+
+    /**
+     * Cached selection range of this editor
+     */
+    cachedSelectionRange: Range;
 
     /**
      * A cached undo snapshot before auto complete, it will be restored into editor when a BackSpace key is pressed before other event is fired
@@ -83,7 +85,6 @@ interface EditorCore {
 
 export default EditorCore;
 
-export type ApplyInlineStyle = (core: EditorCore, styler: (element: HTMLElement) => void) => void;
 export type AttachDomEvent = (
     core: EditorCore,
     eventName: string,
@@ -109,8 +110,6 @@ export type Select = (core: EditorCore, arg1: any, arg2?: any, arg3?: any, arg4?
 export type TriggerEvent = (core: EditorCore, pluginEvent: PluginEvent, broadcast: boolean) => void;
 
 export interface CoreApiMap {
-    applyInlineStyle: ApplyInlineStyle;
-
     /**
      * Attach a DOM event to the editor content DIV
      * @param core The EditorCore object

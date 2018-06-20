@@ -2,7 +2,6 @@ export { default as Editor } from './editor/Editor';
 export {
     default as EditorCore,
     CoreApiMap,
-    ApplyInlineStyle,
     AttachDomEvent,
     EditWithUndo,
     Focus,

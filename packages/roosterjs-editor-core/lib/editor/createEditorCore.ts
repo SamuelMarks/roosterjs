@@ -1,7 +1,6 @@
 import EditorCore, { CoreApiMap } from './EditorCore';
 import EditorOptions from './EditorOptions';
 import Undo from '../undo/Undo';
-import applyInlineStyle from '../coreAPI/applyInlineStyle';
 import attachDomEvent from '../coreAPI/attachDomEvent';
 import editWithUndo from '../coreAPI/editWithUndo';
 import focus from '../coreAPI/focus';
@@ -27,10 +26,10 @@ export default function createEditorCore(
         customData: {},
         cachedSelectionRange: null,
         plugins: (options.plugins || []).filter(plugin => !!plugin),
-        idleLoopHandle: 0,
-        ignoreIdleEvent: false,
         api: createCoreApiMap(options.coreApiOverride),
         snapshotBeforeAutoComplete: null,
+        disableRestoreSelectionOnFocus: options.disableRestoreSelectionOnFocus,
+        omitContentEditable: options.omitContentEditableAttributeChanges,
     };
 }
 
@@ -54,7 +53,6 @@ function calcDefaultFormat(node: Node, baseFormat: DefaultFormat): DefaultFormat
 function createCoreApiMap(map: Partial<CoreApiMap>): CoreApiMap {
     map = map || {};
     return {
-        applyInlineStyle: map.applyInlineStyle || applyInlineStyle,
         attachDomEvent: map.attachDomEvent || attachDomEvent,
         editWithUndo: map.editWithUndo || editWithUndo,
         focus: map.focus || focus,
