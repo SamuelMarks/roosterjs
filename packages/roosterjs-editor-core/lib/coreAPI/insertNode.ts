@@ -8,6 +8,7 @@ import {
     getTagOfNode,
     isBlockElement,
     isNodeEmpty,
+    isPositionAtBeginningOf,
     isVoidHtmlElement,
     unwrap,
     wrap,
@@ -146,7 +147,7 @@ function preprocessNode(
             }
 
             if (getTagOfNode(listNode.parentNode) == tag) {
-                if (isNodeEmpty(listNode) || isSelectionAtBeginningOf(range, listNode)) {
+                if (isNodeEmpty(listNode) || isPositionAtBeginningOf(range, listNode)) {
                     range.setEndBefore(listNode);
                 } else {
                     range.setEndAfter(listNode);
@@ -176,29 +177,4 @@ function preprocessNode(
     }
 
     return range;
-}
-
-function isSelectionAtBeginningOf(range: Range, node: Node) {
-    if (range) {
-        if (
-            range.startOffset > 0 &&
-            range.startContainer.nodeType == NodeType.Element &&
-            range.startContainer.childNodes[range.startOffset] == node
-        ) {
-            return true;
-        } else if (range.startOffset == 0) {
-            let container = range.startContainer;
-            while (
-                contains(node, container) &&
-                (!container.previousSibling || isNodeEmpty(container.previousSibling))
-            ) {
-                container = container.parentNode;
-            }
-
-            if (container == node) {
-                return true;
-            }
-        }
-    }
-    return false;
 }
